@@ -1,46 +1,22 @@
 #!/usr/bin/env python3
+""" defines function that adds two matrices """
 
-"""
-Matrix addition
-"""
+
+def matrix_shape(matrix):
+    """ returns list of integers representing dimensions of given matrix """
+
+    matrix_shape = []
+    while type(matrix) is list:
+        matrix_shape.append(len(matrix))
+        matrix = matrix[0]
+    return matrix_shape
 
 
 def add_matrices(mat1, mat2):
-    """
-    Adds two matrices element-wise.
+    """ returns new matrix that is sum of two matrices added element-wise """
 
-    Args:
-        mat1 (list): The first matrix.
-        mat2 (list): The second matrix.
-
-    Returns:
-        list: The result of adding mat1 and mat2 element-wise.
-        None: If the matrices are not the same shape.
-    """
-    if not isinstance(mat1, list) or not isinstance(mat2, list):
+    if matrix_shape(mat1) != matrix_shape(mat2):
         return None
-
-    def check_shape(m1, m2):
-        if isinstance(m1, list) and isinstance(m2, list):
-            if len(m1) != len(m2):
-                return False
-            for sub1, sub2 in zip(m1, m2):
-                if not check_shape(sub1, sub2):
-                    return False
-            return True
-        return True
-
-# Check the shapes of mat1 and mat2
-    if not check_shape(mat1, mat2):
-        return None
-
-    # Function to add matrices element-wise
-    def add_elementwise(m1, m2):
-
-        # Function to add matrices element-wise
-        if isinstance(m1, list) and isinstance(m2, list):
-            return [add_elementwise(sub1, sub2) for sub1, sub2 in zip(m1, m2)]
-        else:
-            return m1 + m2
-
-    return add_elementwise(mat1, mat2)
+    if len(matrix_shape(mat1)) is 1:
+        return [mat1[i] + mat2[i] for i in range(len(mat1))]
+    return [add_matrices(mat1[i], mat2[i]) for i in range(len(mat1))]

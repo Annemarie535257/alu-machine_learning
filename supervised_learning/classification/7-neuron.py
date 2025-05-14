@@ -5,6 +5,7 @@ Class Neuron that defines a single neuron performing binary classification
 
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Neuron:
@@ -131,15 +132,18 @@ class Neuron:
         self.__W -= alpha * dw
         self.__b -= alpha * db
 
-    def train(self, X, Y, iterations=5000, alpha=0.05):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
         """
-        Trains the neuron
+        Trains the neuron by updating the __W, __b, and __A
 
         Args:
             X: input data
             Y: Correct labels of the input data
             iterations: Number of iterations to train over
             alpha: Learning rate
+            verbose (bool, optional): _description_. Defaults to True.
+            graph (bool, optional): _description_. Defaults to True.
+            step (int, optional): _description_. Defaults to 100.
 
         Returns:
             The evaluation of the training data after
@@ -154,8 +158,22 @@ class Neuron:
         if alpha < 0:
             raise ValueError('alpha must be positive')
 
-        for _ in range(iterations):
+        costs = []
+        for i in range(iterations):
             A = self.forward_prop(X)
             self.gradient_descent(X, Y, A, alpha)
+
+            if verbose and i % step == 0:
+                cost = self.cost(Y, A)
+                print('Cost after {} iterations: {}'.format(i, cost))
+            if graph and i % step == 0:
+                cost = self.cost(Y, A)
+                costs.append(cost)
+        if graph and costs:
+            plt.plot(np.arange(0, iterations, step), costs)
+            plt.xlabel('iteration')
+            plt.ylabel('cost')
+            plt.title('Training Cost')
+            plt.show()
         return self.evaluate(X, Y)
     

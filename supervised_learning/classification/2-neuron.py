@@ -79,3 +79,4 @@ class Neuron:
         sigmoid = 1 / (1 + np.exp(-z))
         self.__A = sigmoid
         return self.__A
+    
